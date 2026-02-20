@@ -39,3 +39,9 @@ async def remove_bg(file: UploadFile = File(...)):
     buffer.seek(0)
 
     return StreamingResponse(buffer, media_type="image/png")
+
+# your routes here...
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

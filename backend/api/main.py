@@ -1,5 +1,47 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
+from PIL import Image
+import io
+
+app = FastAPI()
+
+origins = [
+    "http://127.0.0.1:5500",
+    "http://localhost:5500",
+    "https://haein1.github.io/background-remover"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+@app.post("/grayscale")
+async def grayscale_image(file: UploadFile = File(...)):
+    image_bytes = await file.read()
+    image = Image.open(io.BytesIO(image_bytes))
+
+    # Convert to grayscale
+    output = image.convert("L")
+
+    buffer = io.BytesIO()
+    output.save(buffer, format="PNG")
+    buffer.seek(0)
+
+    return StreamingResponse(buffer, media_type="image/png")
+
+'''
+
+from fastapi import FastAPI, UploadFile, File
+from fastapi.responses import StreamingResponse
 from rembg import remove
 from PIL import Image
 import io
@@ -46,3 +88,4 @@ async def remove_bg(file: UploadFile = File(...)):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+ '''

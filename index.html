@@ -1,4 +1,118 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Grayscale Image Converter</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            margin: 15px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #333;
+        }
+
+        img {
+            margin-top: 20px;
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Grayscale Image Converter</h1>
+
+    <input type="file" id="imageInput" accept="image/*">
+    <br>
+    <button onclick="convertImage()">Convert to Grayscale</button>
+
+    <div>
+        <img id="resultImage" />
+    </div>
+</div>
+
+<div class="footer">
+    Built with FastAPI + Pillow
+</div>
+
+<script>
+async function convertImage() {
+    const fileInput = document.getElementById("imageInput");
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert("Please select an image first.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+        const response = await fetch("http://localhost:8080/grayscale", {
+            method: "POST",
+            body: formData
+        });
+
+        if (!response.ok) {
+            alert("Server error.");
+            return;
+        }
+
+        const blob = await response.blob();
+        const imageUrl = URL.createObjectURL(blob);
+
+        document.getElementById("resultImage").src = imageUrl;
+
+    } catch (error) {
+        alert("Cannot connect to server.");
+        console.error(error);
+    }
+}
+</script>
+
+</body>
+</html>
+<!--
+<!DOCTYPE html>
 <html>
   <head>
     <title>Background Remover</title>
@@ -19,3 +133,4 @@
     <script src="app.js"></script>
   </body>
 </html>
+-->

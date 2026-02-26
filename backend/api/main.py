@@ -9,7 +9,7 @@ app = FastAPI()
 origins = [
     "http://127.0.0.1:5500",
     "http://localhost:5500",
-    "https://haein1.github.io/background-remover"
+    "https://haein1.github.io"
 ]
 
 app.add_middleware(

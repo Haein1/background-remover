@@ -87,7 +87,7 @@ async function convertImage() {
     formData.append("file", file);
 
     try {
-        const response = await fetch("http://localhost:8080/grayscale", {
+        const response = await fetch("https://background-remover-4qhc.onrender.com/grayscale", {
             method: "POST",
             body: formData
         });
